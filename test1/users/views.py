@@ -7,6 +7,7 @@ from hashlib import sha1
 
 #用户注册界面
 def register(request):
+
     return render(request,'users/register.html')
 #保存到数据库
 def register_cheak(request):
@@ -26,7 +27,6 @@ def register_cheak(request):
     return render(request,'users/login.html')
 #用户登录界面
 def login(request):
-    name = request.COOKIES['name']
     return render(request,'users/login.html',{'name':name})
 #验证用户名密码
 def login_cheak( request):
@@ -43,6 +43,7 @@ def login_cheak( request):
 
         t1 = ttsxinfo.objects.filter(name=name)
         if name==t1[0].name and pwd_sha == t1[0].pwd:
+            request.session['islogin']=True
             reponse = render(request,'users/index.html')
             reponse.set_cookie('name',name)
             return reponse
