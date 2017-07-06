@@ -119,14 +119,5 @@ $(function(){
 		{
 			return false;
 		}
-
 	});
-
-
-
-
-
-
-
-
 })
