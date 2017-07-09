@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block foot %}
+
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <script>
+        $(function(){
+            eorr_name = true;
+            eorr_pwd = true;
+            $('#sub').submit(function(){
+                $('#name').blur();
+                $('#pwd').blur();
+                //alert(eorr_name);
+                //alert(eorr_pwd);
+                return eorr_name && eorr_pwd;
+            });
+
+            $('#name').blur(function(){
+                name = $('#name').val();
+                $.get('/register_cheak/',{'name':name},function(date){
+                    if(date.eorr != 1){
+                        $('#user_error').html('用户名不存在').show();
+                        eorr_name = false;
+                    }
+                    else{
+                        $('#user_error').hide();
+                        eorr_name = true;
+                    }
+                })
+            });
+
+            $('#pwd').blur(function(){
+                pwd = $('#pwd').val();
+
+                if(pwd.length<8 || pwd.length>20){
+                    $('.pwd_error').html('密码最少8位，最长20位').show();
+                    eorr_pwd = false;
+                }
+                else{
+                        $('.pwd_error').hide();
+                        eorr_pwd = true;
+                }
+            });
+
+
+        })
+    </script>
+
+<body>
+	<div class="login_top clearfix">
+		<a href="../ttsx_good/index.html" class="login_logo"><img src="/static/images/logo02.png"></a>
+	</div>
+
+	<div class="login_form_bg">
+		<div class="login_form_wrap clearfix">
+			<div class="login_banner fl"></div>
+			<div class="slogan fl">日夜兼程 · 急速送达</div>
+			<div class="login_form fr">
+				<div class="login_title clearfix">
+					<h1>用户登录</h1>
+					<a href="/register/">立即注册</a>
+				</div>
+				<div class="form_input">
+					<form method="post" id="sub" action="/login_cheak/">
+                        {% csrf_token %}
+						<input type="text" name="name" id="name" class="name_input" placeholder="请输入用户名">
+						<div class="user_error" id="user_error">输入错误</div>
+						<input type="password" name="pwd" id="pwd" class="pass_input" placeholder="请输入密码">
+						<div class="pwd_error" style="display: block">{{ eorr }}</div>
+						<div class="more_input clearfix">
+							<input type="checkbox" value="1" name="box" checked>
+							<label>记住用户名</label>
+							<a href="#">忘记密码</a>
+						</div>
+						<input type="submit" name="" value="登录" class="input_submit">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock foot %}
